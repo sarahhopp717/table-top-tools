@@ -122,15 +122,12 @@ function getProficiencyBonus(level, rank) {
  * @returns {number} the cover bonus to AC
  */
 function getCoverBonus(behindObstacle, takingCover) {
-  let coverBonus = 0;
-  let behindObstacleBonus = 2;
-  let takingCoverBonus = 4;
-  if (behindObstacle) {
-    coverBonus = coverBonus + behindObstacleBonus;
-  } else if (takingCoverBonus) {
-    coverBonus = coverBonus + takingCoverBonus;
+  if (behindObstacle && takingCover) {
+    return 4;
+  } else if (behindObstacle) {
+    return 2;
   } else {
-    return coverBonus;
+    return 0;
   }
 }
 
@@ -170,9 +167,9 @@ function canSee(light, vision) {
   if (light === "bright") {
     return true;
   } else if (light === "dim") {
-    vision === "low-light" || vision === "dark";
+    return vision === "low-light" || vision === "dark";
   } else if (light === "dark") {
-    vision === "dark";
+    return vision === "dark";
   } else {
     return false;
   }
@@ -188,4 +185,12 @@ function canSee(light, vision) {
  * @param {number} damage - damage on a normal hit
  * @returns {number} damage dealt by the strike
  */
-function getStrikeDamage(attack, ac, damage) {}
+function getStrikeDamage(attack, ac, damage) {
+  if (doesStrikeCrit(attack, ac)) {
+    return damage * 2;
+  } else if (isHit(attack, ac)) {
+    return damage;
+  } else {
+    return 0;
+  }
+}
